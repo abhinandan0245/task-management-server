@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply text-sm leading-normal font-normal bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white;
+}
+
+::-webkit-scrollbar {
+  @apply w-0 h-0;
+}
