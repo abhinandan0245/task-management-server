@@ -4,7 +4,8 @@
   "main": "main.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon src/main.js"
+    "dev": "nodemon src/main.js",
+    "start": "node src/main.js"
   },
   "keywords": [],
   "author": "",
