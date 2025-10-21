@@ -18,7 +18,10 @@ const port = process.env.PORT || 10000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors({
+  origin: ["https://taskmanagement100.netlify.app"], // aapki Netlify site
+  credentials: true
+}));
 
 connectDb();
 
