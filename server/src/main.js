@@ -17,15 +17,14 @@ const port = process.env.PORT || 10000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-<<<<<<< HEAD
 app.use(cors({ origin: ["http://localhost:5173"] }));
 // app.use(cors());
-=======
+
 app.use(cors({
   origin: ["https://taskmanagement100.netlify.app"], // aapki Netlify site
   credentials: true
 }));
->>>>>>> f9a303fb0c7015299f27de4d2785218d77b5732b
+
 
 
 
