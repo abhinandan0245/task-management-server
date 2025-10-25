@@ -62,7 +62,7 @@ export const Profile = () => {
               size="icon"
               className="rounded-full"
             >
-              <ArrowLeftIcon className="w-4 h-4" />
+              <ArrowLeftIcon className="w-4 h-4"/>
             </Button>
             <h1 className="text-base font-semibold dark:font-medium">
               Manage your profile

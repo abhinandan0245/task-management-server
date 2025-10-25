@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Container } from "../components/ui/container";
+import { motion } from "framer-motion";
+
 import {
   Select,
   SelectContent,
@@ -124,22 +126,42 @@ export const Tasks = () => {
     }
   };
 
+  // Animation variants for staggered reveal
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1, // delay between cards
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+  };
+
   return (
     <main className="h-full overflow-y-auto">
       <section>
         <Container>
-          <div className="py-3 flex items-center justify-between gap-2">
+          <div className="flex flex-col gap-4 py-3 md:flex-row md:items-center md:justify-between">
+            {/* Left Section - Title */}
             <div className="inline-flex items-center gap-2">
               <ListCheckIcon className="w-5 h-5" />
-              <h1 className="text-base font-semibold dark:font-medium">
+              <h1 className="text-lg font-semibold dark:font-medium">
                 My Tasks
               </h1>
             </div>
-            <div className="flex items-center gap-2">
+
+            {/* Right Section - Filters & Search */}
+            <div className="flex flex-col items-stretch w-full gap-3 sm:flex-row sm:items-center md:w-auto">
+              {/* Status Filter */}
               <Select
                 value={filters?.status ?? "none"}
                 onChange={handleOnSelectChange}
-                className="w-40"
+                className="w-full sm:w-40"
               >
                 <SelectTrigger>
                   {filters?.status ?? "Filter by status"}
@@ -150,132 +172,239 @@ export const Tasks = () => {
                   <SelectItem>Completed</SelectItem>
                 </SelectContent>
               </Select>
+
+              {/* Search Input */}
               <Input
                 type="search"
                 placeholder="Search by task title"
                 value={filters?.title ?? ""}
                 onChange={handleOnInputChange}
                 size="small"
-                className="outline-none w-80"
+                className="w-full outline-none sm:w-64 md:w-80"
               />
             </div>
           </div>
-          <table className="w-full">
-            <thead className="bg-zinc-900 text-white">
-              <tr>
-                <th className="p-2 text-start align-middle font-medium">
-                  S.No
-                </th>
-                <th className="p-2 text-start align-middle font-medium">
-                  Title
-                </th>
-                <th className="p-2 text-start align-middle font-medium">
-                  Assigned To-dos
-                </th>
-                <th className="p-2 text-start align-middle font-medium">
-                  Description
-                </th>
-                <th className="p-2 text-end align-middle font-medium">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {tasks?.length ? (
-                tasks?.map((item, index) => (
-                  <tr
-                    key={index}
-                    className="border-b border-b-zinc-200 transition-colors lg:hover:bg-zinc-50"
-                  >
-                    <td className="p-2 text-start align-middle">
-                      {index + 1}.
-                    </td>
-                    <td className="p-2 text-start align-middle">
-                      <Link
-                        to={`/tasks/details/${item?._id}`}
-                        className="underline"
-                      >
-                        {item?.title}
-                      </Link>
-                    </td>
-                    <td className="p-2 text-start align-middle">
-                      Includes {item?.content?.length}+ to-dos
-                    </td>
-                    <td className="p-2 text-start align-middle">
-                      <p className="max-w-xl w-full truncate">
-                        {item?.description}
-                      </p>
-                    </td>
-                    <td className="p-2 text-end align-middle">
-                      <span className="inline-flex items-center justify-end gap-1">
+
+          {/* ✅ Responsive Task Table */}
+          <div className="mt-4 overflow-x-auto">
+            {/* Desktop Table */}
+            <table className="hidden w-full text-sm text-left border-collapse md:table">
+              <thead className="text-white bg-zinc-900">
+                <tr>
+                  <th className="p-2 font-medium">S.No</th>
+                  <th className="p-2 font-medium">Title</th>
+                  <th className="p-2 font-medium">Assigned To-dos</th>
+                  <th className="p-2 font-medium">Description</th>
+                  <th className="p-2 font-medium text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tasks?.length ? (
+                  tasks.map((item, index) => (
+                    <tr
+                      key={item._id}
+                      className="border-b border-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                    >
+                      <td className="p-2">{index + 1}.</td>
+                      <td className="p-2">
                         <Link
-                          to="/tasks/details/taskid/update/"
-                          className={cn(
-                            buttonVariants("ghost", "icon"),
-                            "text-blue-600"
-                          )}
+                          to={`/tasks/details/${item._id}`}
+                          className="text-blue-600 underline dark:text-blue-400"
                         >
-                          <PencilLineIcon className="w-4 h-4" />
+                          {item.title}
                         </Link>
-                        {item?.status === "incomplete" ? (
+                      </td>
+                      <td className="p-2">
+                        Includes {item.content?.length} to-dos
+                      </td>
+                      <td className="max-w-xs p-2 truncate">
+                        {item.description}
+                      </td>
+                      <td className="p-2 text-right">
+                        <span className="inline-flex items-center gap-1">
+                          <Link
+                            to={`/tasks/details/${item._id}/update`}
+                            className={cn(
+                              buttonVariants("ghost", "icon"),
+                              "text-blue-600"
+                            )}
+                          >
+                            <PencilLineIcon className="w-4 h-4" />
+                          </Link>
+                          {item.status === "incomplete" ? (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() =>
+                                handleChangeStatus(item._id, "completed")
+                              }
+                              className="text-orange-600"
+                            >
+                              {loading === item._id + "status" ? (
+                                <span className="w-5 h-5 border-2 border-transparent rounded-full border-r-red-600 animate-spin" />
+                              ) : (
+                                <XCircleIcon className="w-4 h-4" />
+                              )}
+                            </Button>
+                          ) : (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() =>
+                                handleChangeStatus(item._id, "incomplete")
+                              }
+                              className="text-green-600"
+                            >
+                              {loading === item._id + "status" ? (
+                                <span className="w-5 h-5 border-2 border-transparent rounded-full border-r-green-600 animate-spin" />
+                              ) : (
+                                <CheckCheckIcon className="w-4 h-4" />
+                              )}
+                            </Button>
+                          )}
                           <Button
                             type="button"
                             variant="ghost"
                             size="icon"
-                            onClick={() =>
-                              handleChangeStatus(item?._id, "completed")
-                            }
-                            className="text-orange-600"
+                            onClick={() => handleDeleteTask(item._id)}
+                            className="text-red-600"
                           >
-                            {loading ===
-                            item?._id?.toString().concat("status") ? (
-                              <span className="w-6 h-6 rounded-full border-2 border-transparent border-r-red-600 animate-spin inline-block" />
+                            {loading === item._id + "delete" ? (
+                              <span className="w-5 h-5 border-2 border-transparent rounded-full border-r-red-600 animate-spin" />
                             ) : (
-                              <XCircleIcon className="w-4 h-4" />
+                              <Trash2Icon className="w-4 h-4" />
+                            )}
+                          </Button>
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={5} className="p-3 font-medium text-center">
+                      Nothing to show here
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+
+            {/* ✅ Mobile Card Layout */}
+            {/* ✅ Mobile Card Layout with Animation */}
+            <motion.div
+              className="space-y-4 md:hidden"
+              variants={containerVariants}
+              initial="hidden"
+              animate="show"
+            >
+              {tasks?.length ? (
+                tasks.map((item, index) => (
+                  <motion.div
+                    key={item._id}
+                    variants={cardVariants}
+                    className="relative p-4 bg-white border shadow-sm border-zinc-200 dark:border-zinc-700 rounded-xl dark:bg-zinc-900"
+                  >
+                    {/* 🧭 Clickable overlay link */}
+                    <Link
+                      to={`/tasks/details/${item._id}`}
+                      className="absolute inset-0 z-0 rounded-xl"
+                    ></Link>
+
+                    <div className="relative z-10">
+                      <div className="flex items-center justify-between">
+                        <h3 className="font-semibold text-zinc-900 dark:text-zinc-100">
+                          {index + 1}. {item.title}
+                        </h3>
+                        <span
+                          className={cn(
+                            "text-xs font-medium px-2 py-1 rounded-md",
+                            item.status === "completed"
+                              ? "bg-green-100 text-green-700"
+                              : "bg-red-100 text-red-700"
+                          )}
+                        >
+                          {item.status}
+                        </span>
+                      </div>
+
+                      <p className="mt-1 text-sm truncate text-zinc-600 dark:text-zinc-400">
+                        {item.description || "No description provided"}
+                      </p>
+                      <p className="mt-2 text-xs text-zinc-500">
+                        {item.content?.length || 0} to-dos assigned
+                      </p>
+
+                      {/* Actions */}
+                      <div className="flex flex-wrap items-center gap-2 mt-3">
+                        <Link
+                          to={`/tasks/details/${item._id}/update`}
+                          className={cn(
+                            buttonVariants("outline", "sm"),
+                            "text-blue-600 relative z-20 p-1"
+                          )}
+                        >
+                          <PencilLineIcon className="w-4 h-4 mr-1" /> Edit
+                        </Link>
+
+                        {item.status === "incomplete" ? (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            className="relative z-20 p-1 text-orange-600"
+                            onClick={() =>
+                              handleChangeStatus(item._id, "completed")
+                            }
+                          >
+                            {loading === item._id + "status" ? (
+                              <span className="w-5 h-5 border-2 border-transparent rounded-full border-r-orange-600 animate-spin" />
+                            ) : (
+                              <>
+                                <XCircleIcon className="w-4 h-4 mr-1" /> Mark
+                                Complete
+                              </>
                             )}
                           </Button>
                         ) : (
                           <Button
                             type="button"
-                            variant="ghost"
-                            size="icon"
+                            variant="outline"
+                            size="sm"
+                            className="relative z-20 p-1 text-green-600"
                             onClick={() =>
-                              handleChangeStatus(item?._id, "incomplete")
+                              handleChangeStatus(item._id, "incomplete")
                             }
-                            className="text-green-600"
                           >
-                            {loading ===
-                            item?._id?.toString().concat("status") ? (
-                              <span className="w-6 h-6 rounded-full border-2 border-transparent border-r-green-600 animate-spin inline-block" />
-                            ) : (
-                              <CheckCheckIcon className="w-4 h-4" />
-                            )}
+                            <CheckCheckIcon className="w-4 h-4 mr-1" /> Mark
+                            Incomplete
                           </Button>
                         )}
+
                         <Button
                           type="button"
-                          variant="ghost"
-                          onClick={() => handleDeleteTask(item?._id)}
-                          className="text-red-600"
+                          variant="outline"
+                          size="sm"
+                          className="relative z-20 p-1 text-red-600"
+                          onClick={() => handleDeleteTask(item._id)}
                         >
-                          <Trash2Icon className="w-4 h-4 me-2" />
-                          {loading === item?._id?.toString().concat("delete")
-                            ? "Deleting"
-                            : "Delete"}
+                          <Trash2Icon className="w-4 h-4 mr-1" /> Delete
                         </Button>
-                      </span>
-                    </td>
-                  </tr>
+                      </div>
+                    </div>
+                  </motion.div>
                 ))
               ) : (
-                <tr>
-                  <td colSpan={6} className="text-center p-2 font-medium">
-                    Nothing to show here
-                  </td>
-                </tr>
+                <motion.p
+                  variants={cardVariants}
+                  className="py-4 font-medium text-center text-zinc-700 dark:text-zinc-300"
+                >
+                  Nothing to show here
+                </motion.p>
               )}
-            </tbody>
-          </table>
+            </motion.div>
+          </div>
         </Container>
       </section>
     </main>

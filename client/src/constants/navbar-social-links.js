@@ -9,21 +9,21 @@ export const NavbarSocialLinks = [
   {
     id: 1,
     icon: GithubIcon,
-    href: "",
+    href: "https://github.com/abhinandan0245",
   },
   {
     id: 2,
     icon: LinkedinIcon,
-    href: "",
+    href: "https://www.linkedin.com/in/abhinandangupta1/",
   },
-  {
-    id: 3,
-    icon: FacebookIcon,
-    href: "",
-  },
-  {
-    id: 4,
-    icon: InstagramIcon,
-    href: "",
-  },
+  // {
+  //   id: 3,
+  //   icon: FacebookIcon,
+  //   href: "",
+  // },
+  // {
+  //   id: 4,
+  //   icon: InstagramIcon,
+  //   href: "",
+  // },
 ];

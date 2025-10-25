@@ -132,7 +132,7 @@ export const CreateTask = () => {
                     className="flex items-center justify-between border border-zinc-200 rounded-md p-1 ps-3"
                   >
                     <p className="flex-1 font-medium">
-                      {index + 1}. {item}
+                      {index + 1}.{item}
                     </p>
                     <Button type="button" variant="ghost" size="icon">
                       <Trash2Icon className="w-4 h-4" />

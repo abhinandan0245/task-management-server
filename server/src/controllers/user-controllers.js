@@ -101,10 +101,13 @@ const updatePasswordController = async (req, res, next) => {
   }
 };
 
+<<<<<<< HEAD
 
 // with google .....................
 
 
+=======
+>>>>>>> f9a303fb0c7015299f27de4d2785218d77b5732b
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const googleSignInController = async (req, res, next) => {
@@ -152,13 +155,20 @@ const googleSignInController = async (req, res, next) => {
 };
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> f9a303fb0c7015299f27de4d2785218d77b5732b
 export {
   signUpController,
   signInController,
   detailsController,
   updateDetailsController,
   updatePasswordController,
+<<<<<<< HEAD
   googleSignInController,
+=======
+  googleSignInController
+>>>>>>> f9a303fb0c7015299f27de4d2785218d77b5732b
 };
 

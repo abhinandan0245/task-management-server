@@ -6,7 +6,7 @@ import { ChevronDownIcon } from "lucide-react";
 const base = "w-max relative";
 const baseT = "w-full justify-between font-normal";
 const baseC =
-  "absolute top-[110%] left-0 z-20 min-w-full w-max rounded-md bg-white border border-zinc-200 p-1 scale-y-0 transition-transform origin-top";
+  "absolute top-[110%] left-0 z-20 min-w-full w-max rounded-md bg-neutral-700 border border-zinc-200 p-1 scale-y-0 transition-transform origin-top";
 const baseCW = "w-full flex flex-col gap-1";
 const baseI = "w-full";
 
@@ -54,7 +54,7 @@ const SelectTrigger = ({ children, className }) => {
     </Button>
   );
 };
-const SelectContent = ({ children, className }) => {
+const SelectContent = ({ children, className }) => { 
   const { isShow, setIsShow } = useSelectContext();
 
   const ref = useRef();

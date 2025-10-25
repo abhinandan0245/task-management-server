@@ -13,6 +13,8 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { useEffect, useRef, useState } from "react";
 import axios from "../api/axios";
+import { GoogleLogin } from "@react-oauth/google";
+
 
 export const SignIn = () => {
   const [searchParams] = useSearchParams();
@@ -75,7 +77,7 @@ export const SignIn = () => {
       <section className="pt-16 pb-10">
         <Container>
           {commingFromSignUp && (
-            <Card className="max-w-md w-full mb-6 mx-auto">
+            <Card className="w-full max-w-md mx-auto mb-6">
               <CardBody className="mb-0">
                 <p>
                   Congratulations! Your account with{" "}
@@ -86,7 +88,7 @@ export const SignIn = () => {
               </CardBody>
             </Card>
           )}
-          <Card className="max-w-md w-full mx-auto">
+          <Card className="w-full max-w-md mx-auto">
             <CardHeader>
               <CardTitle>Login to Task Management!</CardTitle>
               <CardDescription>
@@ -131,16 +133,43 @@ export const SignIn = () => {
                 <Button
                   type="submit"
                   size="large"
-                  className="w-full justify-center"
+                  className="justify-center w-full"
                 >
                   Continue to dashboard
                 </Button>
               </form>
-              <div className="w-full flex items-center gap-3 my-6">
+              <div className="flex items-center w-full gap-3 my-6">
                 <div className="flex-1 h-[0.5px] bg-zinc-200 dark:bg-zinc-700" />
                 <p className="text-xs text-zinc-500">Or continue with</p>
                 <div className="flex-1 h-[0.5px] bg-zinc-200 dark:bg-zinc-700" />
               </div>
+                   {/* with google  */}
+              <div className="flex justify-center mt-4">
+                <GoogleLogin
+                  onSuccess={async (credentialResponse) => {
+                    const token = credentialResponse.credential;
+
+                    try {
+                      // Send token to your backend for verification
+                      const res = await axios.post("/api/user/google-signin", {
+                        token,
+                      });
+
+                      localStorage.setItem("__tmutoken", res.data.token);
+                      localStorage.setItem("__tmuid", res.data.user._id);
+
+                      window.location.reload();
+                    } catch (error) {
+                      alert(error?.response?.data?.message || error?.message);
+                    }
+                  }}
+                  onError={() => {
+                    alert("Google Sign-In failed. Try again.");
+                  }}
+                />
+              </div>
+
+
               <p className="font-medium text-center">
                 New to Task Management?{" "}
                 <Link to="/sign-up/" className="underline">

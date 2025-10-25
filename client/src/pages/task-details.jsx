@@ -154,9 +154,11 @@ export const TaskDetails = () => {
     <main className="h-full overflow-y-auto">
       <section className="py-6">
         <Container>
-          <div className="py-2 flex items-center justify-between gap-1">
-            <span className="inline-flex items-center gap-2">
+          {/* Header: Back + Actions */}
+          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div className="inline-flex items-center gap-2">
               <Button
+                onClick={() => navigate(-1)}
                 type="button"
                 variant="ghost"
                 size="icon"
@@ -164,99 +166,120 @@ export const TaskDetails = () => {
               >
                 <ArrowLeftIcon className="w-4 h-4" />
               </Button>
-              <h1 className="text-base font-semibold dark:font-medium">
+              <h1 className="flex text-sm font-semibold sm:text-lg dark:font-medium">
                 Task details -{" "}
                 <span className="text-blue-600">#{task?._id}</span>
               </h1>
-            </span>
-            <span className="inline-flex items-center justify-end gap-1">
+            </div>
+
+            <div className="flex flex-wrap gap-2 mt-2 md:mt-0">
               <Link
                 to={`/tasks/details/${task?._id}/update/`}
                 className={cn(buttonVariants("outline"), "text-blue-600")}
               >
-                <PencilLineIcon className="w-4 h-4 me-2" />
+                <PencilLineIcon className="w-4 h-4 mr-1" />
                 Update
               </Link>
-              {task?.status === "incomplete" ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleChangeStatus}
-                  className="text-orange-600"
-                >
-                  <XCircleIcon className="w-4 h-4 me-2" />
-                  {loading === "status"
-                    ? "Updating..."
-                    : "Marked as incomplete"}
-                </Button>
-              ) : (
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleChangeStatus}
-                  className="text-green-600"
-                >
-                  <CheckCheckIcon className="w-4 h-4 me-2" />
-                  {loading === "status" ? "Updating..." : "Marked as completed"}
-                </Button>
-              )}
+
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleChangeStatus}
+                className={`${
+                  task?.status === "completed"
+                    ? "text-green-600"
+                    : "text-orange-600"
+                }`}
+              >
+                {task?.status === "completed" ? (
+                  <>
+                    <CheckCheckIcon className="w-4 h-4 mr-1" />
+                    Marked as completed
+                  </>
+                ) : (
+                  <>
+                    <XCircleIcon className="w-4 h-4 mr-1" />
+                    Marked as incomplete
+                  </>
+                )}
+              </Button>
+
               <Button
                 type="button"
                 variant="outline"
                 onClick={handleDeleteTask}
                 className="text-red-600"
               >
-                <Trash2Icon className="w-4 h-4 me-2" />
-                {loading === "delete" ? "Deleting" : "Delete"}
+                <Trash2Icon className="w-4 h-4 mr-1" />
+                {loading === "delete" ? "Deleting..." : "Delete"}
               </Button>
-            </span>
+            </div>
           </div>
-          <div className="w-full">
-            <table className="w-full mb-6">
-              <thead className="bg-zinc-900 text-white">
-                <tr className="border-b border-b-zinc-200">
-                  <th className="w-40 p-2 text-start align-middle font-medium">
-                    Heading
-                  </th>
-                  <th className="p-2 text-start align-middle font-medium">
-                    Contents
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="border-b border-b-zinc-200">
-                  <th className="w-40 p-2 text-start align-middle font-semibold">
-                    Task Title
-                  </th>
-                  <td className="p-2 text-start align-middle">{task?.title}</td>
-                </tr>
-                <tr className="border-b border-b-zinc-200">
-                  <th className="w-40 p-2 text-start align-top font-semibold">
-                    Task Description
-                  </th>
-                  <td className="p-2 text-start align-top">
-                    {task?.description}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
 
-            <p className="text-lg font-semibold mb-2">Assigned To-dos</p>
-            <ul className="flex flex-col gap-1 mb-10">
+          {/* Task Details */}
+          <div className="mt-6">
+            {/* Mobile Card View */}
+            <div className="flex flex-col gap-4 md:hidden">
+              <div className="p-4 bg-white border rounded-lg dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700">
+                <p className="text-sm font-semibold text-zinc-500">
+                  Task Title
+                </p>
+                <p className="text-base font-medium">{task?.title}</p>
+              </div>
+
+              <div className="p-4 bg-white border rounded-lg dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700">
+                <p className="text-sm font-semibold text-zinc-500">
+                  Task Description
+                </p>
+                <p className="text-base">{task?.description}</p>
+              </div>
+            </div>
+
+            {/* Desktop Table View */}
+            <div className="hidden md:block">
+              <table className="w-full mb-6 border-collapse">
+                <thead className="text-white bg-zinc-900">
+                  <tr>
+                    <th className="w-40 p-2 font-medium text-start">Heading</th>
+                    <th className="p-2 font-medium text-start">Contents</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-zinc-200">
+                    <th className="w-40 p-2 font-semibold text-start">
+                      Task Title
+                    </th>
+                    <td className="p-2 text-start">{task?.title}</td>
+                  </tr>
+                  <tr className="border-b border-zinc-200">
+                    <th className="w-40 p-2 font-semibold text-start">
+                      Task Description
+                    </th>
+                    <td className="p-2 text-start">{task?.description}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* Assigned To-dos */}
+            <p className="mb-2 text-lg font-semibold">Assigned To-dos</p>
+            <ul className="flex flex-col gap-2">
               {task?.content.length ? (
-                task?.content.map((item, index) => (
+                task.content.map((item, index) => (
                   <li
                     key={index}
-                    className="flex items-center justify-between gap-3 border border-zinc-200 rounded-md p-1 ps-3"
+                    className="flex justify-between gap-2 p-2 border rounded-md sm:flex-row sm:items-center border-zinc-200 dark:border-zinc-700 dark:bg-zinc-900"
                   >
-                    <input
-                      type="checkbox"
-                      name={index}
-                      className="w-4 h-4 accent-zinc-900"
-                      checked={item?.status === "completed"}
-                      onChange={handleOnChildStatusChange}
-                    />
-                    <p className="flex-1 font-medium">{item?.title}</p>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        name={index}
+                        className="w-4 h-4 accent-zinc-900 dark:accent-zinc-200"
+                        checked={item?.status === "completed"}
+                        onChange={handleOnChildStatusChange}
+                      />
+                      <p className="font-medium">{item?.title}</p>
+                    </div>
                     <Button
                       type="button"
                       variant="ghost"
