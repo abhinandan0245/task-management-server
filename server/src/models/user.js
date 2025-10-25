@@ -18,6 +18,7 @@ const UserSchema = new Schema(
       type: String,
       required: [true, "Password is required in 'user'!"],
     },
+    
   },
   { timestamps: true }
 );

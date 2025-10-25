@@ -1,0 +1,3 @@
+mongodb+srv://admin:4sFB9segY6OpLo6g@cluster0.wfmie1c.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0;
+
+password : 4sFB9segY6OpLo6g 

@@ -1,5 +1,4 @@
 import { Router } from "express";
-
 import { authentication } from "../middlewares/authentication.js";
 import { checkForValidationError } from "../middlewares/validation-handler.js";
 
@@ -11,6 +10,7 @@ import {
 } from "../validations/user-validations.js";
 import {
   detailsController,
+  googleSignInController,
   signInController,
   signUpController,
   updateDetailsController,
@@ -25,6 +25,7 @@ UserRouter.post(
   checkForValidationError,
   signUpController
 );
+
 UserRouter.post(
   "/sign-in",
   signIn(),
@@ -32,9 +33,12 @@ UserRouter.post(
   signInController
 );
 
+// google route
+UserRouter.post("/google-signin", googleSignInController);
+
 UserRouter.get("/details", authentication, detailsController);
 
-UserRouter.patch(
+UserRouter.patch( 
   "/update",
   authentication,
   updateDetails(),

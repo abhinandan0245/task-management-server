@@ -5,8 +5,8 @@ export const checkForValidationError = (req, res, next) => {
 
   if (!errors.isEmpty()) {
     return res.status(400).json({
-      error: "BAD_REQUEST",
-      message: errors.array()[0].msg,
+        error: "BAD_REQUEST",
+        message: errors.array()[0].msg,
     });
   }
 

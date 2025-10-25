@@ -32,7 +32,7 @@ const signUp = () => [
     .isString()
     .isStrongPassword()
     .withMessage(
-      "Password must be a strong combination of numbers, alphabates and special characters!"
+      "Password must be a strong combination of numbers, alphabates and special characters!"  
     ),
 ];
 

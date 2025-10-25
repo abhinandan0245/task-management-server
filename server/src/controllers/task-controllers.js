@@ -26,7 +26,7 @@ const createController = async (req, res, next) => {
   }
 };
 
-const searchController = async (req, res, next) => {
+const searchController = async (req, res, next) => {   
   const { user } = req.authenticationResponse;
 
   const page = req.query.page ? parseInt(req.query.page.toString()) : 1;
@@ -99,6 +99,7 @@ const updateDetailsController = async (req, res, next) => {
 };
 
 const updateStatusController = async (req, res, next) => {
+  
   const task = req.task;
   const status = req.body.status;
 
