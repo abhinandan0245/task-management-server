@@ -112,7 +112,7 @@ const googleSignInController = async (req, res, next) => {
   const { token } = req.body; // coming from frontend GoogleLogin response
 
   try {
-    // 1️⃣ Verify token with Google
+    // Verify token with Google
     const ticket = await client.verifyIdToken({
       idToken: token,
       audience: process.env.GOOGLE_CLIENT_ID,
@@ -121,11 +121,11 @@ const googleSignInController = async (req, res, next) => {
     const payload = ticket.getPayload();
     const { email, name, sub } = payload; // `sub` is Google's unique user ID
 
-    // 2️⃣ Check if user already exists in DB
+    //  Check if user already exists in DB
     let user = await UserModel.findOne({ email });
 
     if (!user) {
-      // 3️⃣ Create new user if not found
+      //  Create new user if not found
       user = await UserModel.create({
         name: name || "Google User",
         email,
