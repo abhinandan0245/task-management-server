@@ -101,7 +101,7 @@ const updatePasswordController = async (req, res, next) => {
   }
 };
 
-<<<<<<< HEAD
+
 
 // with google .....................
 
