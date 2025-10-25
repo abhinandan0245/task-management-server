@@ -14,8 +14,7 @@ import {
   signInController,
   signUpController,
   updateDetailsController,
-  updatePasswordController,
-  googleSignInController
+  updatePasswordController, 
 } from "../controllers/user-controllers.js";
 
 export const UserRouter = Router();
@@ -34,7 +33,7 @@ UserRouter.post(
   signInController
 );
 
-<<<<<<< HEAD
+
 // google route
 UserRouter.post("/google-signin", googleSignInController);
 
