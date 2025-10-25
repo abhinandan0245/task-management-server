@@ -38,9 +38,9 @@ UserRouter.post(
 // google route
 UserRouter.post("/google-signin", googleSignInController);
 
-=======
+
 UserRouter.post("/google-signin", googleSignInController);
->>>>>>> f9a303fb0c7015299f27de4d2785218d77b5732b
+
 UserRouter.get("/details", authentication, detailsController);
 
 UserRouter.patch( 
